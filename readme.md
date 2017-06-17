@@ -25,10 +25,20 @@ loff_t  scull_llseek(struct file *filp, loff_t off, int whence);
  void scull_seq_stop(struct seq_file *s, void *v)
  int scull_seq_show(struct seq_file *s, void *v)
 ```
-2. in the main moulde, call scull_create_proc, scull_remove_proc to init the cdev
-
+2. in the main moulde, call scull_create_proc, scull_remove_proc to init/remove the cdev
+```c
 void scull_create_proc(void);
-
 void scull_remove_proc(void);
+```
 
+##  netlink template
 
+1. according to your requirement, to rewrite belows functions contents in proc_templ.c
+```c
+ void scull_nl_recv_msg(struct sk_buff *skb) void *scull_seq_next(struct seq_file *s, void *v, loff_t *pos)
+```
+2. in the main moulde, call scull_create_netlink, scull_remove_netlink to init/remove the cdev
+```c
+void scull_create_netlink(void);
+void scull_remove_netlink(void);
+```

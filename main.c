@@ -15,6 +15,7 @@
 
 //option
 #include "proc_templ.h"		//void scull_create_proc(void);void scull_remove_proc(void);
+#include "netlink_templ.h"		//void scull_create_netlink(void);void scull_remove_netlink(void);
 
 //
 /*
@@ -66,6 +67,8 @@ void scull_cleanup_module(void)
 //#ifdef SCULL_DEBUG /* use proc only if debugging */
 	scull_remove_proc();
 //#endif
+
+    scull_remove_netlink();
 
 	/* cleanup_module is never called if registering failed */
 	unregister_chrdev_region(devno, scull_nr_devs);
@@ -122,7 +125,7 @@ int scull_init_module(void)
 
         /* Initialize each device. */
 	for (i = 0; i < scull_nr_devs; i++) {
-		sema_init(&scull_devices[i].sem, 1);
+		sema_init(&scull_devices[i].sem, 1/*init value*/);
 		scull_setup_cdev(&scull_devices[i], i);
 	}
 
@@ -134,6 +137,8 @@ int scull_init_module(void)
 //#ifdef SCULL_DEBUG /* only when debugging */
 	scull_create_proc();
 //#endif
+
+    scull_create_netlink();
 
 	return 0; /* succeed */
 
